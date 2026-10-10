@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Control Room</title><script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script></head>
+<body><x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap">
+<style>body{margin:0;background:#F5F6FF}*{box-sizing:border-box}
+.app{display:grid;grid-template-columns:220px 1fr;min-height:100vh;font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:#1C1B3A}
+.side{background:#fff;padding:22px 14px;display:flex;flex-direction:column;gap:6px;border-right:1px solid #E6E8F8}
+.nav{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:12px;font-size:14px;font-weight:600;color:#53527A;min-height:44px}
+.nav.on{background:#EEEAFF;color:#4A2FD6}.nav b{width:8px;height:8px;border-radius:50%}
+.main{padding:22px 26px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.card{background:#fff;border-radius:20px;padding:18px;border:1px solid #E9EBFA;min-width:0}
+.card h3{margin:0 0 2px;font-size:15px;font-weight:800}.sub{font-size:12px;color:#5E5D85;margin:0 0 12px}
+.g{display:grid;gap:16px}.s4{grid-template-columns:repeat(4,minmax(0,1fr))}.r1{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}.r3{grid-template-columns:repeat(3,minmax(0,1fr))}.r2{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.stat{border-radius:20px;padding:16px}.stat small{font-size:12px;font-weight:700;color:#3C3B63}.stat strong{display:block;font-size:28px;font-weight:800;margin-top:4px}
+table{width:100%;border-collapse:collapse;font-size:13px}th{text-align:left;font-size:11px;color:#5E5D85;padding:6px 8px;font-weight:700}td{padding:9px 8px;border-top:1px solid #F0F1FB;font-weight:600}
+.tag{font-size:11px;font-weight:800;padding:4px 9px;border-radius:999px;display:inline-block}
+.b{border:0;border-radius:10px;padding:0 12px;min-height:36px;font:700 12px 'Plus Jakarta Sans',sans-serif;cursor:pointer}
+.bz{background:linear-gradient(90deg,#FF5C7A,#FF9F43);color:#fff;border-radius:16px;padding:12px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-weight:700}
+.cam{border-radius:14px;height:112px;position:relative;color:#fff;font-size:12px;font-weight:700}
+.cam span{position:absolute;left:8px;top:8px;background:#D92D50;border-radius:6px;padding:2px 7px;font-size:10px}.cam em{position:absolute;left:8px;bottom:8px;font-style:normal}
+@media(max-width:1100px){.r1,.r3,.r2{grid-template-columns:1fr}.s4{grid-template-columns:1fr 1fr}}
+@media(max-width:760px){.app{grid-template-columns:1fr}.side{flex-direction:row;overflow-x:auto}.main{padding:14px}}</style>
+</helmet>
+<div class="app">
+<aside class="side">
+<div style="font-weight:800;font-size:18px;padding:0 8px 16px">Suraksha CR</div>
+<div class="nav on"><b style="background:#7C5CFF"></b>Overview</div>
+<div class="nav"><b style="background:#FF5C7A"></b>Live Incidents</div>
+<div class="nav"><b style="background:#38BDF8"></b>Pole Map</div>
+<div class="nav"><b style="background:#14B8A6"></b>Camera Feeds</div>
+<div class="nav"><b style="background:#FFB020"></b>Pole Status</div>
+<div class="nav"><b style="background:#8B7CFF"></b>History &amp; Reports</div>
+<div class="nav"><b style="background:#94A3B8"></b>Logout</div>
+</aside>
+<main class="main">
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><div><h1 style="margin:0;font-size:26px;font-weight:800">Control Room</h1><p style="margin:2px 0 0;font-size:13px;color:#5E5D85">Operator: CR-1042 | Shift: Night</p></div><span class="tag" style="background:#DDF7F1;color:#0B6B5C;font-size:12px">System online</span></div>
+
+<div class="bz"><span style="font-size:15px;font-weight:800">BUZZER ON: SOS from Pole P-17, Sector 4</span><span style="font-size:13px;font-weight:600">Acknowledge karte hi buzzer band hoga</span><button class="b" style="background:#fff;color:#C0264B;margin-left:auto">Mute buzzer</button></div>
+
+<div class="g s4">
+<div class="stat" style="background:#FFE2E8"><small>New</small><strong>4</strong></div>
+<div class="stat" style="background:#FFF0CC"><small>Responding</small><strong>3</strong></div>
+<div class="stat" style="background:#E4F8EC"><small>Resolved today</small><strong>28</strong></div>
+<div class="stat" style="background:#DDF3FF"><small>Poles online</small><strong>46 / 50</strong></div>
+</div>
+
+<div class="g r1">
+<section class="card"><h3>Live incident list</h3><p class="sub">Sample data</p>
+<div style="overflow-x:auto"><table><tr><th>ID</th><th>Type</th><th>Pole</th><th>Time</th><th>Status</th><th>Action</th></tr>
+<tr><td>#2091</td><td>SOS button</td><td>P-17</td><td>02:14:08</td><td><span class="tag" style="background:#FFE2E8;color:#A31D3F">New</span></td><td><button class="b" style="background:#7C5CFF;color:#fff">Acknowledge</button></td></tr>
+<tr><td>#2090</td><td>Suspicious motion</td><td>P-08</td><td>02:09:41</td><td><span class="tag" style="background:#FFE9B8;color:#7A4B00">Responding</span></td><td><button class="b" style="background:#22C55E;color:#0B3B1E">Resolve</button></td></tr>
+<tr><td>#2089</td><td>Tamper alert</td><td>P-31</td><td>01:58:20</td><td><span class="tag" style="background:#FFE9B8;color:#7A4B00">Responding</span></td><td><button class="b" style="background:#22C55E;color:#0B3B1E">Resolve</button></td></tr>
+<tr><td>#2088</td><td>SOS button</td><td>P-02</td><td>01:40:05</td><td><span class="tag" style="background:#D7F5E0;color:#127A3B">Resolved</span></td><td><button class="b" style="background:#EEEAFF;color:#4A2FD6">View</button></td></tr></table></div></section>
+
+<section class="card" style="padding:14px"><h3>Incident pole location</h3><p class="sub">Pole P-17 par incident</p>
+<svg viewBox="0 0 420 250" width="100%" role="img" aria-label="Map with pole markers, pole P-17 highlighted" style="border-radius:14px;display:block">
+<rect width="420" height="250" fill="#EAF3FF"></rect><rect x="20" y="20" width="110" height="80" rx="8" fill="#D9F2E6"></rect><rect x="170" y="20" width="100" height="60" rx="8" fill="#FFF1D6"></rect><rect x="300" y="30" width="100" height="70" rx="8" fill="#E6E1FF"></rect><rect x="30" y="150" width="130" height="80" rx="8" fill="#FFE3EA"></rect><rect x="230" y="150" width="150" height="80" rx="8" fill="#D9F2E6"></rect>
+<g stroke="#fff" stroke-width="14"><path d="M0 125H420"></path><path d="M150 0V250"></path><path d="M280 0V250"></path></g>
+<circle cx="150" cy="125" r="26" fill="#FF5C7A" opacity=".25"></circle><circle cx="150" cy="125" r="11" fill="#D92D50" stroke="#fff" stroke-width="3"></circle>
+<g fill="#14B8A6" stroke="#fff" stroke-width="2"><circle cx="280" cy="125" r="7"></circle><circle cx="60" cy="125" r="7"></circle><circle cx="350" cy="125" r="7"></circle></g><circle cx="280" cy="50" r="7" fill="#94A3B8" stroke="#fff" stroke-width="2"></circle>
+<rect x="100" y="86" width="100" height="22" rx="11" fill="#fff"></rect><text x="150" y="101" text-anchor="middle" font-size="11" font-weight="700" fill="#1C1B3A" font-family="sans-serif">P-17 Sector 4</text></svg>
+</section></div>
+
+<div class="g r2">
+<section class="card"><h3>Evidence: Incident #2091</h3><p class="sub">Photo + video ke saath location</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<div class="cam" style="background:linear-gradient(135deg,#7C5CFF,#38BDF8)"><span>PHOTO</span><em>IMG_2091.jpg</em></div>
+<div class="cam" style="background:linear-gradient(135deg,#FF5C7A,#FFB020)"><span>VIDEO 15s</span><em>VID_2091.mp4</em></div></div>
+<p style="font-size:13px;font-weight:700;margin:12px 0 4px">Location: Pole P-17, Sector 4 (lat/long)</p>
+<label for="n" style="font-size:12px;font-weight:700">Resolve note (zaroori)</label>
+<input id="n" type="text" placeholder="Kya action liya gaya? e.g. Police team pahunchi" style="width:100%;min-height:42px;border:1.5px solid #D5D8F5;border-radius:12px;padding:0 12px;margin:6px 0 10px;font:600 13px sans-serif;background:#FAFAFF">
+<div style="display:flex;gap:10px"><button class="b" style="background:#7C5CFF;color:#fff;flex:1;min-height:44px">Acknowledge</button><button class="b" style="background:#22C55E;color:#0B3B1E;flex:1;min-height:44px">Resolve</button></div></section>
+
+<section class="card"><h3>Live camera feeds</h3><p class="sub">Poles ke cameras</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<div class="cam" style="background:#2B2A55"><span>LIVE</span><em>P-17 Sector 4</em></div><div class="cam" style="background:#1F4E6B"><span>LIVE</span><em>P-08 Market</em></div>
+<div class="cam" style="background:#0F5A52"><span>LIVE</span><em>P-31 Park</em></div><div class="cam" style="background:#5A2B46"><span>LIVE</span><em>P-02 Gate</em></div></div></section></div>
+
+<section class="card"><h3>Pole status</h3><p class="sub">Online / Offline, Day / Night, Motion, Armed / Disarmed</p>
+<div style="overflow-x:auto"><table><tr><th>Pole</th><th>Connection</th><th>Day / Night</th><th>Motion</th><th>Armed</th></tr>
+<tr><td>P-17</td><td><span class="tag" style="background:#D7F5E0;color:#127A3B">Online</span></td><td>Night</td><td><span class="tag" style="background:#FFE2E8;color:#A31D3F">Motion detected</span></td><td><span class="tag" style="background:#E6E1FF;color:#4A2FD6">Armed</span></td></tr>
+<tr><td>P-08</td><td><span class="tag" style="background:#D7F5E0;color:#127A3B">Online</span></td><td>Night</td><td><span class="tag" style="background:#FFE9B8;color:#7A4B00">Motion detected</span></td><td><span class="tag" style="background:#E6E1FF;color:#4A2FD6">Armed</span></td></tr>
+<tr><td>P-44</td><td><span class="tag" style="background:#E2E8F0;color:#475569">Offline</span></td><td>Night</td><td>No motion</td><td><span class="tag" style="background:#FFF0CC;color:#7A4B00">Disarmed</span></td></tr></table></div></section>
+
+<div class="g r3">
+<section class="card"><h3>Incidents by hour</h3><p class="sub">Sample data</p>
+<svg viewBox="0 0 260 120" width="100%" role="img" aria-label="Bar chart of incidents by time of day"><g fill="#7C5CFF"><rect x="10" y="80" width="26" height="30" rx="5"></rect><rect x="48" y="60" width="26" height="50" rx="5" fill="#38BDF8"></rect><rect x="86" y="30" width="26" height="80" rx="5"></rect><rect x="124" y="10" width="26" height="100" rx="5" fill="#FF5C7A"></rect><rect x="162" y="40" width="26" height="70" rx="5" fill="#FFB020"></rect><rect x="200" y="70" width="26" height="40" rx="5" fill="#14B8A6"></rect></g></svg></section>
+<section class="card"><h3>By incident type</h3><p class="sub">SOS, Motion, Tamper</p>
+<svg viewBox="0 0 100 100" width="120" height="120" role="img" aria-label="Donut chart: SOS 50 percent, motion 30 percent, tamper 20 percent"><g fill="none" stroke-width="16" transform="rotate(-90 50 50)"><circle cx="50" cy="50" r="38" stroke="#FF5C7A" stroke-dasharray="120 239"></circle><circle cx="50" cy="50" r="38" stroke="#38BDF8" stroke-dasharray="72 239" stroke-dashoffset="-120"></circle><circle cx="50" cy="50" r="38" stroke="#FFB020" stroke-dasharray="47 239" stroke-dashoffset="-192"></circle></g></svg></section>
+<section class="card"><h3>Response time</h3><p class="sub">Last 7 days</p>
+<svg viewBox="0 0 260 120" width="100%" role="img" aria-label="Line chart of response time over 7 days"><path d="M10 80L50 60L90 70L130 40L170 55L210 30L250 45" stroke="#14B8A6" stroke-width="3" fill="none"></path><path d="M10 80L50 60L90 70L130 40L170 55L210 30L250 45V110H10Z" fill="#14B8A6" opacity=".15"></path></svg></section></div>
+
+<section class="card"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><div><h3>History and reports</h3><p class="sub" style="margin:0">Saare videos investigation ke liye record rehte hain</p></div>
+<div style="display:flex;gap:8px"><button class="b" style="background:#EEEAFF;color:#4A2FD6;min-height:40px">Download CSV</button><button class="b" style="background:#7C5CFF;color:#fff;min-height:40px">Download PDF report</button></div></div>
+<div style="overflow-x:auto;margin-top:10px"><table><tr><th>ID</th><th>Date</th><th>Pole</th><th>Type</th><th>Video</th><th>Resolved by</th></tr>
+<tr><td>#2088</td><td>10 Oct 2026</td><td>P-02</td><td>SOS</td><td>VID_2088.mp4</td><td>CR-1042</td></tr>
+<tr><td>#2085</td><td>09 Oct 2026</td><td>P-12</td><td>Tamper</td><td>VID_2085.mp4</td><td>CR-1017</td></tr></table></div></section>
+</main></div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":1700}}'>
+class Component extends DCLogic { renderVals(){ return {}; } }
+</script></body></html>

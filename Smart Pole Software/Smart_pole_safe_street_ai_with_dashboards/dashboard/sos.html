@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="hi"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Suraksha SOS Dashboard</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap">
+<style>
+
+body{margin:0;background:#F5F6FF}
+*{box-sizing:border-box}
+.app{display:grid;grid-template-columns:232px 1fr;min-height:100vh;font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:#1C1B3A;background:#F5F6FF}
+.side{background:#fff;padding:24px 16px;display:flex;flex-direction:column;gap:6px;border-right:1px solid #E6E8F8}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;padding:0 8px 18px}
+.logo i{width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,#7C5CFF,#38BDF8);display:block}
+.nav{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:12px;font-size:14px;font-weight:600;color:#53527A;min-height:44px}
+.nav.on{background:#EEEAFF;color:#4A2FD6}
+.nav b{width:8px;height:8px;border-radius:50%;display:block}
+.main{padding:24px 28px;display:flex;flex-direction:column;gap:20px;min-width:0}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.top h1{margin:0;font-size:26px;font-weight:800}
+.top p{margin:2px 0 0;font-size:13px;color:#5E5D85}
+.pill{display:inline-flex;gap:4px;background:#fff;border:1px solid #E6E8F8;border-radius:999px;padding:4px}
+.pill span{padding:8px 14px;border-radius:999px;font-size:13px;font-weight:700;color:#53527A}
+.pill .a{background:#7C5CFF;color:#fff}
+.card{background:#fff;border-radius:20px;padding:20px;border:1px solid #E9EBFA;min-width:0}
+.card h3{margin:0 0 4px;font-size:15px;font-weight:800}
+.sub{font-size:12px;color:#5E5D85;margin:0 0 14px}
+.g{display:grid;gap:16px}
+.hero{grid-template-columns:minmax(260px,1.1fr) minmax(300px,1.9fr)}
+.stats{grid-template-columns:repeat(4,minmax(0,1fr))}
+.row2{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}
+.row3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.stat{border-radius:20px;padding:18px}
+.stat small{font-size:12px;font-weight:700;color:#3C3B63}
+.stat strong{display:block;font-size:30px;font-weight:800;margin-top:6px}
+.stat em{font-style:normal;font-size:12px;font-weight:600;color:#2F2E55}
+.sos{background:linear-gradient(160deg,#FFE9EE,#FFF3E6);display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px}
+.ring{width:176px;height:176px;border-radius:50%;background:#FFD3DB;display:flex;align-items:center;justify-content:center}
+.ring2{width:144px;height:144px;border-radius:50%;background:#FFB4C2;display:flex;align-items:center;justify-content:center}
+.btn-sos{width:112px;height:112px;border-radius:50%;border:0;background:#D92D50;color:#fff;font:800 28px 'Plus Jakarta Sans',sans-serif;box-shadow:0 10px 24px rgba(217,45,80,.4);cursor:pointer}
+.chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.chip{font-size:12px;font-weight:700;padding:6px 10px;border-radius:999px;background:#fff;color:#3C3B63}
+.btn{border:0;border-radius:12px;padding:12px 16px;font:700 14px 'Plus Jakarta Sans',sans-serif;min-height:44px;cursor:pointer}
+.feed{display:flex;flex-direction:column;gap:10px}
+.item{border:1px solid #ECEEFB;border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:6px}
+.tag{font-size:11px;font-weight:800;padding:3px 8px;border-radius:999px}
+.tr{background:#F3F1FF;border-radius:10px;padding:8px 10px;font-size:12.5px;color:#3A2B9C}
+.ct{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #F0F1FB;font-size:13.5px;font-weight:600}
+.av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex:none}
+.in{width:100%;border:1.5px dashed #C9CDF3;border-radius:12px;padding:11px;font:600 13px 'Plus Jakarta Sans',sans-serif;color:#5E5D85;background:#FAFAFF}
+@media (max-width:1100px){.hero,.row2,.row3{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:760px){.app{grid-template-columns:1fr}.side{flex-direction:row;overflow-x:auto;padding:12px}.logo{padding:0 8px}.main{padding:16px}.stats{grid-template-columns:1fr 1fr}}
+
+html{scroll-behavior:smooth}
+a.nav{text-decoration:none;cursor:pointer}
+.pill span{cursor:pointer}
+.btn-sos:disabled{opacity:.6;cursor:wait}
+.msg{font-size:13px;font-weight:700;min-height:18px}
+textarea.in{resize:vertical;min-height:44px;border-style:solid}
+.rec{display:flex;flex-direction:column;gap:8px;flex:1}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+</style></head>
+<body>
+<div class="app">
+<aside class="side">
+<div class="logo"><i></i>Suraksha</div>
+<a class="nav on" href="#top"><b style="background:#7C5CFF"></b>Dashboard</a>
+<a class="nav" href="#sos"><b style="background:#FF5C7A"></b>SOS Alert</a>
+<a class="nav" href="#map"><b style="background:#14B8A6"></b>Safe Exit Map</a>
+<a class="nav" href="#map"><b style="background:#38BDF8"></b>Live GPS</a>
+<a class="nav" href="#contacts"><b style="background:#FFB020"></b>Emergency Contacts</a>
+<a class="nav" href="#record"><b style="background:#8B7CFF"></b>Audio / Video 15s</a>
+<a class="nav" href="#sos"><b style="background:#22C55E"></b>Cancel Alert</a>
+<a class="nav" href="#feed"><b style="background:#F97316"></b>Translator</a>
+<a class="nav" href="/control"><b style="background:#94A3B8"></b>Control Room</a>
+</aside>
+<main class="main" id="top">
+<div class="top">
+<div><h1>Safety Dashboard</h1><p>Live alerts, response teams aur analytics ek jagah</p></div>
+<div class="pill" id="langPill"><span class="a" data-l="hi">Hindi</span><span data-l="en">English</span><span data-l="orig">Original</span></div>
+</div>
+
+<div class="g hero">
+<section class="card sos" id="sos">
+<h3>SOS Emergency</h3>
+<p class="sub" style="margin:0">Ek tap me location, complaint, 15 sec audio-video bhejein</p>
+<textarea class="in" id="sosText" rows="2" placeholder="Kya hua? (optional) - kisi bhi bhasha me likhein"></textarea>
+<div class="ring"><div class="ring2"><button class="btn-sos" id="sosBtn" aria-label="Send SOS alert">SOS</button></div></div>
+<div class="msg" id="sosMsg"></div>
+<div class="chips"><span class="chip">Emergency Contacts</span><span class="chip">Police</span><span class="chip">QRT Team</span><span class="chip">Patrolling Team</span></div>
+<button class="btn" id="cancelBtn" style="background:#22C55E;color:#0B3B1E;width:100%" disabled>Cancel Alert - Problem solved</button>
+</section>
+
+<section class="card" style="padding:16px" id="map">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+<div><h3>Safe Exit Navigation</h3><p class="sub" style="margin:0">Live location se nearest safe point tak route</p></div>
+<span class="tag" id="gpsTag" style="background:#DDF7F1;color:#0B6B5C">GPS shared live</span></div>
+<svg viewBox="0 0 640 300" width="100%" role="img" aria-label="Map with safe route from current location to safe shelter" style="border-radius:14px;display:block">
+<rect width="640" height="300" fill="#EAF3FF"></rect>
+<rect x="30" y="30" width="150" height="90" rx="10" fill="#D9F2E6"></rect><rect x="230" y="20" width="120" height="70" rx="10" fill="#FFF1D6"></rect><rect x="420" y="40" width="190" height="80" rx="10" fill="#E6E1FF"></rect>
+<rect x="40" y="170" width="190" height="100" rx="10" fill="#FFE3EA"></rect><rect x="290" y="150" width="130" height="120" rx="10" fill="#D9F2E6"></rect><rect x="480" y="170" width="130" height="100" rx="10" fill="#FFF1D6"></rect>
+<g stroke="#fff" stroke-width="16" fill="none"><path d="M0 140H640"></path><path d="M200 0V300"></path><path d="M450 0V300"></path><path d="M0 70L200 140"></path></g>
+<path d="M90 140H200V140H450V210H540" stroke="#14B8A6" stroke-width="6" stroke-dasharray="2 10" stroke-linecap="round" fill="none"></path>
+<circle cx="90" cy="140" r="20" fill="#38BDF8" opacity=".3"></circle><circle cx="90" cy="140" r="9" fill="#2563EB" stroke="#fff" stroke-width="3"></circle>
+<circle cx="540" cy="210" r="16" fill="#22C55E"></circle><path d="M533 210l5 5 9-10" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"></path>
+<circle cx="200" cy="250" r="10" fill="#F43F5E"></circle>
+<rect x="330" y="104" width="110" height="26" rx="13" fill="#fff"></rect><text x="385" y="121" text-anchor="middle" font-size="12" font-weight="700" fill="#1C1B3A" font-family="sans-serif">Police Chowki 0.4 km</text>
+</svg>
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;font-size:13px;font-weight:700">
+<span style="color:#1D4ED8" id="youHere">Aap yahan hain</span><span style="color:#0B6B5C">Safe shelter: City Hospital - 850 m, 11 min</span></div>
+</section>
+</div>
+
+<div class="g stats">
+<div class="stat" style="background:#FFE2E8"><small>Active SOS</small><strong id="stActive">0</strong><em id="stActiveSub"></em></div>
+<div class="stat" style="background:#DDF3FF"><small>Avg response time</small><strong id="stResp">-</strong><em>Target 5 min</em></div>
+<div class="stat" style="background:#E4F8EC"><small>Resolved / Cancelled</small><strong id="stRes">0%</strong><em>Cancel alert se police informed</em></div>
+<div class="stat" style="background:#FFF0CC"><small>Translated alerts</small><strong id="stTr">0</strong><em>Hindi + English auto</em></div>
+</div>
+
+<div class="g row2">
+<section class="card">
+<h3>Alerts this week</h3><p class="sub">Aaye hue vs resolved - live data</p>
+<svg viewBox="0 0 560 210" width="100%" role="img" aria-label="Line chart of alerts and resolved alerts">
+<g stroke="#ECEEFB"><path d="M30 30H550"></path><path d="M30 80H550"></path><path d="M30 130H550"></path><path d="M30 180H550"></path></g>
+<path id="wArea" fill="#7C5CFF" opacity=".14"></path>
+<path id="wAlerts" stroke="#7C5CFF" stroke-width="3" fill="none" stroke-linejoin="round"></path>
+<path id="wRes" stroke="#14B8A6" stroke-width="3" fill="none" stroke-linejoin="round"></path>
+<g id="wDays" font-size="11" fill="#5E5D85" font-family="sans-serif" text-anchor="middle"></g>
+</svg>
+<div style="display:flex;gap:16px;font-size:12px;font-weight:700"><span style="color:#4A2FD6">Alerts</span><span style="color:#0B6B5C">Resolved</span></div>
+</section>
+<section class="card">
+<h3>Alert status</h3><p class="sub">Resolved, Active, Cancelled</p>
+<div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+<svg viewBox="0 0 100 100" width="130" height="130" role="img" aria-label="Alert status donut"><g fill="none" stroke-width="16" transform="rotate(-90 50 50)" id="stDonut"></g></svg>
+<div style="font-size:13px;font-weight:700;display:flex;flex-direction:column;gap:8px"><span style="color:#127A3B" id="lgRes">Resolved 0%</span><span style="color:#C0264B" id="lgAct">Active 0%</span><span style="color:#9A6200" id="lgCan">Cancelled 0%</span></div></div>
+</section>
+</div>
+
+<div class="g row3">
+<section class="card" id="feed">
+<h3>Live alert feed + Translator</h3><p class="sub">Original bhasha ke saath Hindi / English</p>
+<div class="feed" id="feedList"></div>
+</section>
+<section class="card" id="contacts">
+<h3>Emergency Contacts</h3><p class="sub">SOS par inhe turant alert + GPS jayega</p>
+<div id="ctList"></div>
+<div style="height:10px"></div>
+<button class="btn" id="addCt" style="background:#EEEAFF;color:#4A2FD6;width:100%">+ Add emergency contact</button>
+</section>
+<section class="card" id="record">
+<h3>15 sec Audio / Video</h3><p class="sub">Record karein aur turant bhejein</p>
+<div style="display:flex;align-items:center;gap:16px">
+<svg viewBox="0 0 100 100" width="96" height="96" role="img" aria-label="Recording timer"><circle cx="50" cy="50" r="40" fill="none" stroke="#ECE9FF" stroke-width="10"></circle><circle id="recArc" cx="50" cy="50" r="40" fill="none" stroke="#7C5CFF" stroke-width="10" stroke-linecap="round" stroke-dasharray="0 251" transform="rotate(-90 50 50)"></circle><text id="recTxt" x="50" y="57" text-anchor="middle" font-size="22" font-weight="800" fill="#1C1B3A" font-family="sans-serif">0:00</text></svg>
+<div class="rec"><button class="btn" id="vidBtn" style="background:#7C5CFF;color:#fff">Video record</button><button class="btn" id="audBtn" style="background:#DDF3FF;color:#0B5A85">Audio record</button></div></div>
+<div class="msg" id="recMsg" style="margin-top:8px"></div>
+<div style="height:8px"></div>
+<h3 style="font-size:13px">Bhasha ke hisab se alerts</h3>
+<svg viewBox="0 0 260 100" width="100%" role="img" aria-label="Bar chart of alerts by language"><g id="langBars" font-size="10" font-family="sans-serif" fill="#5E5D85" text-anchor="middle"></g></svg>
+</section>
+</div>
+</main></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let S=null, lang='hi', myId=localStorage.getItem('suraksha_sos_id')||null, pos=null, recording=false;
+
+/* ---------- translator (offline phrase table; extend as needed) ---------- */
+const PHRASES=[
+ {m:['ਮੈਨੂੰ ਮਦਦ ਚਾਹੀਦੀ ਹੈ','ਪਿੱਛਾ'],hi:'मुझे मदद चाहिए, कोई मेरा पीछा कर रहा है',en:'I need help, someone is following me'},
+ {m:['எனக்கு உதவி தேவை'],hi:'मुझे सहायता चाहिए',en:'I need help'},
+ {m:['मुझे मदद चाहिए','bachao','बचाओ'],hi:'मुझे मदद चाहिए',en:'I need help'},
+ {m:['पीछा','following me'],hi:'कोई मेरा पीछा कर रहा है',en:'Someone is following me'},
+ {m:['help','madad','मदद'],hi:'मदद चाहिए',en:'I need help'},
+ {m:['पुलिस','police'],hi:'पुलिस बुलाइए',en:'Please call the police'},
+];
+function detectLang(t){
+ if(/[\u0A00-\u0A7F]/.test(t))return 'Punjabi';if(/[\u0B80-\u0BFF]/.test(t))return 'Tamil';
+ if(/[\u0900-\u097F]/.test(t))return 'Hindi';if(/[\u0980-\u09FF]/.test(t))return 'Bengali';
+ if(/[\u0C00-\u0C7F]/.test(t))return 'Telugu';if(/[A-Za-z]/.test(t))return 'English';return '';
+}
+function translate(t){const l=t.toLowerCase();const hit=PHRASES.find(p=>p.m.some(x=>l.includes(x.toLowerCase())));return hit||null}
+
+/* ---------- language pills ---------- */
+$('langPill').onclick=e=>{const s=e.target.closest('span');if(!s)return;lang=s.dataset.l;[...$('langPill').children].forEach(c=>c.classList.toggle('a',c===s));renderFeed()};
+
+/* ---------- GPS ---------- */
+function getPos(){return new Promise(res=>{if(!navigator.geolocation)return res(null);navigator.geolocation.getCurrentPosition(p=>res({lat:p.coords.latitude,lng:p.coords.longitude}),()=>res(null),{timeout:4000,enableHighAccuracy:true})})}
+(async()=>{pos=await getPos();if(pos){$('youHere').textContent=`Aap yahan hain (${pos.lat.toFixed(4)}, ${pos.lng.toFixed(4)})`}else{$('gpsTag').textContent='GPS unavailable';$('gpsTag').style.background='#FFF0CC';$('gpsTag').style.color='#7A4B00'}})();
+
+/* ---------- SOS ---------- */
+async function recordClip(kind,seconds=15){
+  if(recording)return null;
+  const stream=await navigator.mediaDevices.getUserMedia(kind==='video'?{video:true,audio:true}:{audio:true});
+  const mime=(kind==='video'?['video/webm;codecs=vp8,opus','video/webm','video/mp4']:['audio/webm;codecs=opus','audio/webm','audio/mp4']).find(m=>window.MediaRecorder&&MediaRecorder.isTypeSupported(m))||'';
+  const rec=new MediaRecorder(stream,mime?{mimeType:mime}:undefined);const chunks=[];recording=true;
+  rec.ondataavailable=e=>e.data.size&&chunks.push(e.data);
+  const done=new Promise(r=>rec.onstop=r);rec.start(500);
+  const t0=Date.now();const arc=$('recArc');
+  const timer=setInterval(()=>{const s=Math.min(seconds,(Date.now()-t0)/1000);arc.setAttribute('stroke-dasharray',`${s/seconds*251} 251`);$('recTxt').textContent='0:'+String(Math.floor(s)).padStart(2,'0');if(s>=seconds)rec.stop()},200);
+  await done;clearInterval(timer);stream.getTracks().forEach(t=>t.stop());recording=false;
+  return new Blob(chunks,{type:rec.mimeType||mime||'application/octet-stream'});
+}
+async function recordAndSend(kind){
+  if(!myId){$('recMsg').textContent='Pehle SOS dabayein, phir record karein.';return}
+  $('recMsg').textContent=(kind==='video'?'Video':'Audio')+' record ho raha hai (15 sec)...';$('vidBtn').disabled=$('audBtn').disabled=true;
+  try{
+    const blob=await recordClip(kind);
+    if(blob&&blob.size){await fetch('/api/upload/'+myId,{method:'POST',headers:{'Content-Type':blob.type},body:blob});$('recMsg').textContent='Bhej diya gaya - control room ko mil gaya.'}
+    else $('recMsg').textContent='Kuch record nahi hua.';
+  }catch(e){$('recMsg').textContent='Camera/mic permission nahi mili: '+(e.message||e)}
+  $('vidBtn').disabled=$('audBtn').disabled=false;
+}
+$('vidBtn').onclick=()=>recordAndSend('video');$('audBtn').onclick=()=>recordAndSend('audio');
+
+$('sosBtn').onclick=async()=>{
+  $('sosBtn').disabled=true;$('sosMsg').style.color='#A31D3F';$('sosMsg').textContent='SOS bhej rahe hain...';
+  if(!pos)pos=await getPos();
+  const text=$('sosText').value.trim();
+  try{
+    const r=await (await fetch('/api/sos',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,lang:detectLang(text)||'',lat:pos&&pos.lat,lng:pos&&pos.lng})})).json();
+    myId=r.id;localStorage.setItem('suraksha_sos_id',myId);$('cancelBtn').disabled=false;
+    const n=contacts().length;
+    $('sosMsg').textContent=`SOS #${r.no} bheja gaya - control room, police${n?` aur ${n} contacts`:''} ko alert.`;
+    $('sosText').value='';poll();
+    if(navigator.mediaDevices&&window.MediaRecorder){recordAndSend('video')}
+  }catch(e){$('sosMsg').textContent='Server se connect nahi ho paya. Seedha 112 dial karein.'}
+  $('sosBtn').disabled=false;
+};
+$('cancelBtn').onclick=async()=>{
+  if(!myId)return;await fetch('/api/cancel/'+myId,{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});
+  $('sosMsg').style.color='#127A3B';$('sosMsg').textContent='Alert cancel ho gaya - police ko inform kar diya gaya.';
+  myId=null;localStorage.removeItem('suraksha_sos_id');$('cancelBtn').disabled=true;poll();
+};
+if(myId)$('cancelBtn').disabled=false;
+
+/* ---------- contacts (kept in this browser) ---------- */
+const DEF=[{n:'Maa',tag:'Active',c:'#FFE2E8',t:'#A31D3F'},{n:'Rahul (Bhai)',tag:'Active',c:'#DDF3FF',t:'#0B5A85'},{n:'Local Police Station',tag:'Auto',c:'#FFF0CC',t:'#7A4B00'}];
+function contacts(){try{return JSON.parse(localStorage.getItem('suraksha_contacts'))||DEF}catch(e){return DEF}}
+function renderContacts(){$('ctList').innerHTML=contacts().map(c=>`<div class="ct"><span class="av" style="background:${c.c};color:${c.t}">${esc(c.n[0]||'?').toUpperCase()}</span>${esc(c.n)}<span style="margin-left:auto;color:#127A3B;font-size:12px">${esc(c.tag)}</span></div>`).join('')}
+$('addCt').onclick=()=>{const n=prompt('Contact ka naam / number:');if(!n||!n.trim())return;const l=contacts();l.push({n:n.trim().slice(0,40),tag:'Active',c:'#E4F8EC',t:'#127A3B'});localStorage.setItem('suraksha_contacts',JSON.stringify(l));renderContacts()};
+renderContacts();
+
+/* ---------- live data ---------- */
+function renderFeed(){
+  const items=S.incidents.filter(i=>i.source==='Citizen app'||i.text).slice(0,4);
+  const list=items.length?items:S.incidents.slice(0,4);
+  const tagFor=i=>i.audio_url||i.video_url?['#DDF3FF','#0B5A85','Video 15s']:['#FFE2E8','#A31D3F','SOS'];
+  $('feedList').innerHTML=list.map(i=>{
+    const t=tagFor(i),txt=i.text||i.type,tr=translate(txt),l=i.lang||detectLang(txt);
+    const hi=tr?tr.hi:txt, en=tr?tr.en:(l==='English'?txt:'(auto-translation not available for this phrase)');
+    const box=lang==='orig'?'':`<div class="tr">${lang==='en'?'':'Hindi: '+esc(hi)+(lang==='hi'?'<br>':'')}${lang==='hi'?'':'English: '+esc(en)}</div>`;
+    return `<div class="item"><div style="display:flex;justify-content:space-between"><b style="font-size:13px">Alert #${i.no}</b><span class="tag" style="background:${t[0]};color:${t[1]}">${t[2]}</span></div><span style="font-size:13px">${esc(txt)}</span>${box}<span style="font-size:11px;color:#5E5D85">${esc(i.time_str)} | ${esc(i.status)}</span></div>`}).join('')||'<p class="sub">Abhi koi alert nahi.</p>';
+}
+function render(){
+  const st=S.stats;
+  $('stActive').textContent=st.active;$('stActiveSub').textContent=`${st.responding} abhi respond ho rahe`;
+  $('stResp').textContent=st.avg_response_min?st.avg_response_min+' min':'-';
+  $('stRes').textContent=st.resolved_pct+'%';$('stTr').textContent=st.translated;
+  // weekly
+  const mx=Math.max(1,...st.weekly_alerts),X=k=>30+k*80,Y=v=>180-v/mx*150;
+  const path=a=>a.map((v,k)=>(k?'L':'M')+X(k)+' '+Y(v)).join('');
+  $('wAlerts').setAttribute('d',path(st.weekly_alerts));$('wRes').setAttribute('d',path(st.weekly_resolved));
+  $('wArea').setAttribute('d',path(st.weekly_alerts)+'V180H30Z');
+  $('wDays').innerHTML=st.weekly_days.map((d,k)=>`<text x="${X(k)}" y="200">${d}</text>`).join('');
+  // donut
+  const p=st.pct,C=238.76;let off=0,d='';[['resolved','#22C55E'],['new','#FF5C7A'],['cancelled','#FFB020']].forEach(([k,c])=>{const len=((k==='new'?p.new+p.responding:p[k])||0)/100*C;d+=`<circle cx="50" cy="50" r="38" stroke="${c}" stroke-dasharray="${len} ${C}" stroke-dashoffset="${-off}"></circle>`;off+=len});
+  $('stDonut').innerHTML=d;$('lgRes').textContent=`Resolved ${p.resolved}%`;$('lgAct').textContent=`Active ${p.new+p.responding}%`;$('lgCan').textContent=`Cancelled ${p.cancelled}%`;
+  // languages
+  const L=Object.entries(st.langs).sort((a,b)=>b[1]-a[1]).slice(0,5),lm=Math.max(1,...L.map(x=>x[1])),cols=['#7C5CFF','#38BDF8','#14B8A6','#FFB020','#FF5C7A'];
+  $('langBars').innerHTML=L.length?L.map(([n,v],k)=>{const h=Math.max(6,v/lm*55);return `<rect x="${10+k*45}" y="${75-h}" width="30" height="${h}" rx="6" fill="${cols[k]}"></rect><text x="${25+k*45}" y="92">${esc(n.slice(0,5))}</text>`}).join(''):'<text x="130" y="50">Abhi koi language data nahi</text>';
+  renderFeed();
+  // my active alert
+  if(myId){const mine=S.incidents.find(i=>i.id===myId);if(mine){if(mine.status==='responding'){$('sosMsg').style.color='#127A3B';$('sosMsg').textContent=`SOS #${mine.no}: control room respond kar raha hai.`}else if(mine.status==='resolved'||mine.status==='cancelled'){myId=null;localStorage.removeItem('suraksha_sos_id');$('cancelBtn').disabled=true;if(mine.status==='resolved'){$('sosMsg').style.color='#127A3B';$('sosMsg').textContent=`SOS #${mine.no} resolved: ${mine.note}`}}}}
+}
+async function poll(){try{S=await (await fetch('/api/state')).json();render()}catch(e){}}
+poll();setInterval(poll,3000);
+</script>
+</body></html>

@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Suraksha Control Room</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap">
+<style>
+body{margin:0;background:#F5F6FF}*{box-sizing:border-box}
+.app{display:grid;grid-template-columns:220px 1fr;min-height:100vh;font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:#1C1B3A}
+.side{background:#fff;padding:22px 14px;display:flex;flex-direction:column;gap:6px;border-right:1px solid #E6E8F8}
+.nav{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:12px;font-size:14px;font-weight:600;color:#53527A;min-height:44px}
+.nav.on{background:#EEEAFF;color:#4A2FD6}.nav b{width:8px;height:8px;border-radius:50%}
+.main{padding:22px 26px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.card{background:#fff;border-radius:20px;padding:18px;border:1px solid #E9EBFA;min-width:0}
+.card h3{margin:0 0 2px;font-size:15px;font-weight:800}.sub{font-size:12px;color:#5E5D85;margin:0 0 12px}
+.g{display:grid;gap:16px}.s4{grid-template-columns:repeat(4,minmax(0,1fr))}.r1{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}.r3{grid-template-columns:repeat(3,minmax(0,1fr))}.r2{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.stat{border-radius:20px;padding:16px}.stat small{font-size:12px;font-weight:700;color:#3C3B63}.stat strong{display:block;font-size:28px;font-weight:800;margin-top:4px}
+table{width:100%;border-collapse:collapse;font-size:13px}th{text-align:left;font-size:11px;color:#5E5D85;padding:6px 8px;font-weight:700}td{padding:9px 8px;border-top:1px solid #F0F1FB;font-weight:600}
+.tag{font-size:11px;font-weight:800;padding:4px 9px;border-radius:999px;display:inline-block}
+.b{border:0;border-radius:10px;padding:0 12px;min-height:36px;font:700 12px 'Plus Jakarta Sans',sans-serif;cursor:pointer}
+.bz{background:linear-gradient(90deg,#FF5C7A,#FF9F43);color:#fff;border-radius:16px;padding:12px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-weight:700}
+.cam{border-radius:14px;height:112px;position:relative;color:#fff;font-size:12px;font-weight:700}
+.cam span{position:absolute;left:8px;top:8px;background:#D92D50;border-radius:6px;padding:2px 7px;font-size:10px}.cam em{position:absolute;left:8px;bottom:8px;font-style:normal}
+@media(max-width:1100px){.r1,.r3,.r2{grid-template-columns:1fr}.s4{grid-template-columns:1fr 1fr}}
+@media(max-width:760px){.app{grid-template-columns:1fr}.side{flex-direction:row;overflow-x:auto}.main{padding:14px}}
+html{scroll-behavior:smooth}
+a.nav{text-decoration:none;cursor:pointer}
+.bz.off{background:#E6E8F8;color:#53527A}
+.bz.calm{background:linear-gradient(90deg,#14B8A6,#38BDF8)}
+@keyframes pulse{50%{opacity:.78}}
+.bz.ring{animation:pulse 1s infinite}
+tr.sel td{background:#F7F5FF}
+tr.clk{cursor:pointer}
+.cam img{width:100%;height:100%;object-fit:cover;border-radius:14px;display:block}
+.cam.empty{display:flex;align-items:center;justify-content:center;color:#cfd2f5}
+.cam video,.cam img.ph{width:100%;height:100%;object-fit:cover;border-radius:14px}
+.cam.big{height:150px}
+.cam span.g2{background:#22C55E}
+.btnlink{display:inline-flex;align-items:center;text-decoration:none}
+.muted{color:#5E5D85;font-weight:600}
+</style></head>
+<body>
+<div class="app">
+<aside class="side">
+  <div style="font-weight:800;font-size:18px;padding:0 8px 16px">Suraksha CR</div>
+  <a class="nav on" href="#overview"><b style="background:#7C5CFF"></b>Overview</a>
+  <a class="nav" href="#incidents"><b style="background:#FF5C7A"></b>Live Incidents</a>
+  <a class="nav" href="#map"><b style="background:#38BDF8"></b>Pole Map</a>
+  <a class="nav" href="#cameras"><b style="background:#14B8A6"></b>Camera Feeds</a>
+  <a class="nav" href="#poles"><b style="background:#FFB020"></b>Pole Status</a>
+  <a class="nav" href="#history"><b style="background:#8B7CFF"></b>History &amp; Reports</a>
+  <a class="nav" href="/citizen"><b style="background:#22C55E"></b>Citizen SOS App</a>
+  <a class="nav" href="/"><b style="background:#94A3B8"></b>Logout</a>
+</aside>
+<main class="main" id="overview">
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+    <div><h1 style="margin:0;font-size:26px;font-weight:800">Control Room</h1>
+    <p style="margin:2px 0 0;font-size:13px;color:#5E5D85">Operator: CR-1042 | Shift: <span id="shift">Night</span> | <span id="clock"></span></p></div>
+    <span class="tag" id="sys" style="background:#DDF7F1;color:#0B6B5C;font-size:12px">System online</span>
+  </div>
+
+  <div class="bz calm" id="buzzer"><span id="bzText" style="font-size:15px;font-weight:800">All clear - no new alerts</span>
+    <span id="bzSub" style="font-size:13px;font-weight:600"></span>
+    <button class="b" id="muteBtn" style="background:#fff;color:#C0264B;margin-left:auto;display:none">Mute buzzer</button></div>
+
+  <div class="g s4">
+    <div class="stat" style="background:#FFE2E8"><small>New</small><strong id="sNew">0</strong></div>
+    <div class="stat" style="background:#FFF0CC"><small>Responding</small><strong id="sResp">0</strong></div>
+    <div class="stat" style="background:#E4F8EC"><small>Resolved today</small><strong id="sRes">0</strong></div>
+    <div class="stat" style="background:#DDF3FF"><small>Poles online</small><strong id="sPoles">0 / 0</strong></div>
+  </div>
+
+  <div class="g r1">
+    <section class="card" id="incidents"><h3>Live incident list</h3><p class="sub">Active alerts first - click a row to open its evidence</p>
+      <div style="overflow-x:auto"><table><thead><tr><th>ID</th><th>Type</th><th>Pole</th><th>Time</th><th>Status</th><th>Action</th></tr></thead><tbody id="liveRows"></tbody></table></div>
+      <p class="sub" id="liveEmpty" style="margin:10px 0 0;display:none">No active incidents.</p></section>
+
+    <section class="card" id="map" style="padding:14px"><h3>Incident pole location</h3><p class="sub" id="mapSub">Select an incident</p>
+      <svg viewBox="0 0 420 250" width="100%" role="img" aria-label="Map with pole markers" style="border-radius:14px;display:block">
+        <rect width="420" height="250" fill="#EAF3FF"></rect><rect x="20" y="20" width="110" height="80" rx="8" fill="#D9F2E6"></rect><rect x="170" y="20" width="100" height="60" rx="8" fill="#FFF1D6"></rect><rect x="300" y="30" width="100" height="70" rx="8" fill="#E6E1FF"></rect><rect x="30" y="150" width="130" height="80" rx="8" fill="#FFE3EA"></rect><rect x="230" y="150" width="150" height="80" rx="8" fill="#D9F2E6"></rect>
+        <g stroke="#fff" stroke-width="14"><path d="M0 125H420"></path><path d="M150 0V250"></path><path d="M280 0V250"></path></g>
+        <g id="mapPoles"></g></svg></section>
+  </div>
+
+  <div class="g r2">
+    <section class="card"><h3 id="evTitle">Evidence</h3><p class="sub">Photo + video ke saath location</p>
+      <div id="evMedia" style="display:grid;grid-template-columns:1fr 1fr;gap:10px"></div>
+      <p style="font-size:13px;font-weight:700;margin:12px 0 4px" id="evLoc">Location: -</p>
+      <p class="muted" style="font-size:12px;margin:0 0 6px" id="evMeta"></p>
+      <label for="n" style="font-size:12px;font-weight:700">Resolve note (zaroori)</label>
+      <input id="n" type="text" placeholder="Kya action liya gaya? e.g. Police team pahunchi" style="width:100%;min-height:42px;border:1.5px solid #D5D8F5;border-radius:12px;padding:0 12px;margin:6px 0 10px;font:600 13px sans-serif;background:#FAFAFF">
+      <div id="evErr" style="color:#C0264B;font-size:12px;font-weight:700;min-height:16px"></div>
+      <div style="display:flex;gap:10px"><button class="b" id="evAck" style="background:#7C5CFF;color:#fff;flex:1;min-height:44px">Acknowledge</button><button class="b" id="evRes" style="background:#22C55E;color:#0B3B1E;flex:1;min-height:44px">Resolve</button></div></section>
+
+    <section class="card" id="cameras"><h3>Live camera feeds</h3><p class="sub">Poles ke cameras (live from the AI detector)</p>
+      <div id="camGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px"></div></section>
+  </div>
+
+  <section class="card" id="poles"><h3>Pole status</h3><p class="sub">Online / Offline, Day / Night, Motion, Armed / Disarmed</p>
+    <div style="overflow-x:auto"><table><thead><tr><th>Pole</th><th>Camera</th><th>Connection</th><th>Day / Night</th><th>Motion</th><th>Armed</th></tr></thead><tbody id="poleRows"></tbody></table></div></section>
+
+  <div class="g r3">
+    <section class="card"><h3>Incidents by time of day</h3><p class="sub">4-hour blocks, all history</p>
+      <svg viewBox="0 0 260 130" width="100%" role="img" aria-label="Incidents by time of day"><g id="hourBars"></g></svg></section>
+    <section class="card"><h3>By incident type</h3><p class="sub" id="typeLegend">SOS, Motion / AI, Other</p>
+      <svg viewBox="0 0 100 100" width="120" height="120" role="img" aria-label="Incident type donut"><g fill="none" stroke-width="16" transform="rotate(-90 50 50)" id="donut"></g></svg></section>
+    <section class="card"><h3>Response time</h3><p class="sub">Avg minutes to acknowledge, last 7 days</p>
+      <svg viewBox="0 0 260 120" width="100%" role="img" aria-label="Response time line"><path id="respArea" fill="#14B8A6" opacity=".15"></path><path id="respLine" stroke="#14B8A6" stroke-width="3" fill="none"></path></svg></section>
+  </div>
+
+  <section class="card" id="history"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><div><h3>History and reports</h3><p class="sub" style="margin:0">Saare videos investigation ke liye record rehte hain</p></div>
+    <div style="display:flex;gap:8px"><a class="b btnlink" href="/api/export.csv" style="background:#EEEAFF;color:#4A2FD6;min-height:40px">Download CSV</a><button class="b" id="pdfBtn" style="background:#7C5CFF;color:#fff;min-height:40px">Download PDF report</button></div></div>
+    <div style="overflow-x:auto;margin-top:10px"><table><thead><tr><th>ID</th><th>Date</th><th>Pole</th><th>Type</th><th>Evidence</th><th>Resolved by</th><th>Note</th></tr></thead><tbody id="histRows"></tbody></table></div></section>
+</main></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let S=null, selected=null, muted=false, audio=null, lastMediaKey='', lastCamKey='';
+const TAG={new:['#FFE2E8','#A31D3F','New'],responding:['#FFE9B8','#7A4B00','Responding'],resolved:['#D7F5E0','#127A3B','Resolved'],cancelled:['#E2E8F0','#475569','Cancelled']};
+const tag=(st)=>{const t=TAG[st]||TAG.new;return `<span class="tag" style="background:${t[0]};color:${t[1]}">${t[2]}</span>`};
+const hhmm=s=>(s||'').split(' ')[1]||s;
+
+async function api(path,body){const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body||{})});return r.json()}
+
+/* ---------- buzzer ---------- */
+function ensureAudio(){if(!audio){try{audio=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}if(audio&&audio.state==='suspended')audio.resume()}
+document.addEventListener('click',ensureAudio);
+function beep(){if(!audio||muted||audio.state!=='running')return;const o=audio.createOscillator(),g=audio.createGain();o.type='square';o.frequency.value=880;g.gain.value=.08;o.connect(g);g.connect(audio.destination);o.start();o.stop(audio.currentTime+.25)}
+setInterval(()=>{if(S&&S.stats.new>0)beep()},1000);
+$('muteBtn').onclick=()=>{muted=!muted;$('muteBtn').textContent=muted?'Unmute buzzer':'Mute buzzer'};
+
+/* ---------- render ---------- */
+function render(){
+  const st=S.stats, inc=S.incidents;
+  const newest=inc.filter(i=>i.status==='new');
+  const bz=$('buzzer');
+  if(newest.length){const i=newest[0];bz.className='bz ring';$('bzText').textContent=`BUZZER ${muted?'MUTED':'ON'}: ${i.type} from Pole ${i.pole}, ${i.sector}`;$('bzSub').textContent='Acknowledge karte hi buzzer band hoga';$('muteBtn').style.display='';}
+  else{bz.className='bz calm';$('bzText').textContent='All clear - no new alerts';$('bzSub').textContent='';$('muteBtn').style.display='none';muted=false;$('muteBtn').textContent='Mute buzzer'}
+  $('sNew').textContent=st.new;$('sResp').textContent=st.responding;$('sRes').textContent=st.resolved_today;$('sPoles').textContent=`${st.poles_online} / ${st.poles_total}`;
+
+  const active=inc.filter(i=>i.status==='new'||i.status==='responding');
+  const rows=(active.length?active:inc.slice(0,5));
+  if(!selected||!inc.find(i=>i.id===selected))selected=(rows[0]||{}).id||null;
+  $('liveEmpty').style.display=active.length?'none':'block';
+  $('liveRows').innerHTML=rows.map(i=>{
+    const act=i.status==='new'?`<button class="b" data-a="ack" data-id="${i.id}" style="background:#7C5CFF;color:#fff">Acknowledge</button>`
+      :i.status==='responding'?`<button class="b" data-a="open" data-id="${i.id}" style="background:#22C55E;color:#0B3B1E">Resolve</button>`
+      :`<button class="b" data-a="open" data-id="${i.id}" style="background:#EEEAFF;color:#4A2FD6">View</button>`;
+    return `<tr class="clk ${i.id===selected?'sel':''}" data-id="${i.id}"><td>#${i.no}</td><td>${esc(i.type)}</td><td>${esc(i.pole)}</td><td>${hhmm(i.time_str)}</td><td>${tag(i.status)}</td><td>${act}</td></tr>`}).join('');
+
+  renderEvidence();renderMap();renderCams();renderPoles();renderCharts();renderHistory();
+  const up=S.poles.some(p=>p.online)||!S.poles.length;$('sys').textContent=up?'System online':'Cameras offline';$('sys').style.background=up?'#DDF7F1':'#FFF0CC';$('sys').style.color=up?'#0B6B5C':'#7A4B00';
+}
+function renderEvidence(){
+  const i=S.incidents.find(x=>x.id===selected);
+  if(!i){$('evTitle').textContent='Evidence';$('evMedia').innerHTML='<p class="muted">No incident selected.</p>';$('evLoc').textContent='Location: -';$('evMeta').textContent='';return}
+  $('evTitle').textContent=`Evidence: Incident #${i.no}`;
+  const key=[i.id,i.photo_url,i.video_url,i.audio_url].join('|');
+  if(key!==lastMediaKey){lastMediaKey=key;
+    const photo=i.photo_url?`<div class="cam"><span>PHOTO</span><a href="${i.photo_url}" target="_blank"><img src="${i.photo_url}" alt="evidence photo"></a></div>`:`<div class="cam" style="background:linear-gradient(135deg,#7C5CFF,#38BDF8)"><span>PHOTO</span><em>${i.status==='new'||i.status==='responding'?'Recording / pending...':'No photo'}</em></div>`;
+    const vid=i.video_url?`<div class="cam"><span>VIDEO</span><video src="${i.video_url}" controls preload="metadata"></video></div>`:`<div class="cam" style="background:linear-gradient(135deg,#FF5C7A,#FFB020)"><span>VIDEO</span><em>${i.status==='new'||i.status==='responding'?'Recording / pending...':'No video'}</em></div>`;
+    $('evMedia').innerHTML=photo+vid+(i.audio_url?`<div style="grid-column:1/3"><audio src="${i.audio_url}" controls style="width:100%"></audio></div>`:'');}
+  const loc=i.lat!=null?`Location: ${(+i.lat).toFixed(5)}, ${(+i.lng).toFixed(5)} (GPS)`:`Location: Pole ${i.pole}, ${i.sector}`;
+  $('evLoc').textContent=loc;
+  $('evMeta').textContent=`${i.type} | ${i.source} | ${i.time_str}${i.text?' | "'+i.text+'"':''}`+(i.note&&i.status!=='new'?` | Note: ${i.note}`:'');
+  const done=i.status==='resolved'||i.status==='cancelled';
+  $('evAck').disabled=i.status!=='new';$('evAck').style.opacity=i.status==='new'?1:.45;
+  $('evRes').disabled=done;$('evRes').style.opacity=done?.45:1;$('n').disabled=done;
+}
+const SLOTS=[[150,125],[280,125],[60,125],[350,125],[280,50],[150,200],[60,200],[350,200]];
+function renderMap(){
+  const i=S.incidents.find(x=>x.id===selected);
+  $('mapSub').textContent=i?`Pole ${i.pole} par incident #${i.no}`:'No incident selected';
+  const poles=S.poles.length?S.poles:(i?[{pole:i.pole,sector:i.sector,online:false}]:[]);
+  const act=new Set(S.incidents.filter(x=>x.status==='new'||x.status==='responding').map(x=>x.pole));
+  let h='';poles.forEach((p,k)=>{const [x,y]=SLOTS[k%SLOTS.length];const hot=(i&&i.pole===p.pole);
+    if(hot)h+=`<circle cx="${x}" cy="${y}" r="26" fill="#FF5C7A" opacity=".25"></circle>`;
+    h+=`<circle cx="${x}" cy="${y}" r="${hot?11:7}" fill="${hot?'#D92D50':act.has(p.pole)?'#FFB020':p.online?'#14B8A6':'#94A3B8'}" stroke="#fff" stroke-width="${hot?3:2}"></circle>`;
+    if(hot)h+=`<rect x="${x-50}" y="${y-39}" width="100" height="22" rx="11" fill="#fff"></rect><text x="${x}" y="${y-24}" text-anchor="middle" font-size="11" font-weight="700" fill="#1C1B3A" font-family="sans-serif">${esc(p.pole)} ${esc(p.sector)}</text>`});
+  $('mapPoles').innerHTML=h;
+}
+function renderCams(){
+  const poles=S.poles.slice(0,4);const key=poles.map(p=>p.camera+p.online+p.stream).join('|');
+  if(key===lastCamKey)return;lastCamKey=key;
+  const colors=['#2B2A55','#1F4E6B','#0F5A52','#5A2B46'];
+  $('camGrid').innerHTML=poles.length?poles.map((p,k)=>p.online&&p.stream
+    ?`<div class="cam big" style="background:${colors[k]}"><span>LIVE</span><img src="${p.stream}" alt="${esc(p.camera)}"><em style="text-shadow:0 1px 3px #000">${esc(p.pole)} ${esc(p.sector)}</em></div>`
+    :`<div class="cam big empty" style="background:${colors[k]}"><span style="background:#64748B">OFFLINE</span><em>${esc(p.pole)} ${esc(p.sector)}</em></div>`).join('')
+    :'<p class="muted">No cameras connected. Start <b>python app.py</b> to see live feeds.</p>';
+}
+function renderPoles(){
+  $('poleRows').innerHTML=S.poles.length?S.poles.map(p=>`<tr><td>${esc(p.pole)}</td><td>${esc(p.camera)}</td>
+   <td><span class="tag" style="${p.online?'background:#D7F5E0;color:#127A3B':'background:#E2E8F0;color:#475569'}">${p.online?'Online':'Offline'}</span></td>
+   <td>${p.night?'Night':'Day'}</td>
+   <td>${p.motion?`<span class="tag" style="background:#FFE2E8;color:#A31D3F">Motion detected</span>`:'No motion'}</td>
+   <td><span class="tag" style="${p.armed?'background:#E6E1FF;color:#4A2FD6':'background:#FFF0CC;color:#7A4B00'}">${p.armed?'Armed':'Disarmed'}</span></td></tr>`).join('')
+   :'<tr><td colspan="6" class="muted">No poles reporting.</td></tr>';
+}
+function renderCharts(){
+  const st=S.stats,h=st.hourly,mx=Math.max(1,...h),cols=['#7C5CFF','#38BDF8','#7C5CFF','#FF5C7A','#FFB020','#14B8A6'],lab=['0-4','4-8','8-12','12-16','16-20','20-24'];
+  $('hourBars').innerHTML=h.map((v,k)=>{const ht=Math.max(3,Math.round(v/mx*90));return `<rect x="${10+k*38}" y="${105-ht}" width="26" height="${ht}" rx="5" fill="${cols[k]}"></rect><text x="${23+k*38}" y="120" font-size="9" text-anchor="middle" fill="#5E5D85" font-family="sans-serif">${lab[k]}</text><text x="${23+k*38}" y="${100-ht}" font-size="9" text-anchor="middle" fill="#1C1B3A" font-family="sans-serif">${v}</text>`}).join('');
+  const bt=st.by_type,tot=Math.max(1,bt['SOS']+bt['Motion / AI']+bt['Other']),C=238.76;let off=0,d='';
+  [['SOS','#FF5C7A'],['Motion / AI','#38BDF8'],['Other','#FFB020']].forEach(([k,c])=>{const len=bt[k]/tot*C;d+=`<circle cx="50" cy="50" r="38" stroke="${c}" stroke-dasharray="${len} ${C}" stroke-dashoffset="${-off}"></circle>`;off+=len});
+  $('donut').innerHTML=d;$('typeLegend').textContent=`SOS ${bt['SOS']} | Motion/AI ${bt['Motion / AI']} | Other ${bt['Other']}`;
+  const r=st.weekly_resp,rm=Math.max(1,...r),pts=r.map((v,k)=>[10+k*40,105-v/rm*80]);
+  $('respLine').setAttribute('d',pts.map((p,k)=>(k?'L':'M')+p[0]+' '+p[1]).join(''));
+  $('respArea').setAttribute('d',pts.map((p,k)=>(k?'L':'M')+p[0]+' '+p[1]).join('')+'V110H10Z');
+}
+function renderHistory(){
+  const done=S.incidents.filter(i=>i.status==='resolved'||i.status==='cancelled').slice(0,50);
+  $('histRows').innerHTML=done.length?done.map(i=>`<tr><td>#${i.no}</td><td>${esc(i.time_str)}</td><td>${esc(i.pole)}</td><td>${esc(i.type)}</td>
+   <td>${i.video_url?`<a href="${i.video_url}" target="_blank">video</a>`:''} ${i.photo_url?`<a href="${i.photo_url}" target="_blank">photo</a>`:''} ${i.audio_url?`<a href="${i.audio_url}" target="_blank">audio</a>`:''}</td>
+   <td>${esc(i.resolved_by||'-')}</td><td style="max-width:240px">${esc(i.note)}</td></tr>`).join(''):'<tr><td colspan="7" class="muted">No history yet.</td></tr>';
+}
+
+/* ---------- events ---------- */
+async function act(kind,id){
+  if(kind==='ack'){await api('/api/ack/'+id)}
+  else if(kind==='resolve'){const r=await api('/api/resolve/'+id,{note:$('n').value,by:'CR-1042'});if(!r.ok){$('evErr').textContent=r.error||'Failed';return}$('n').value='';$('evErr').textContent=''}
+  await poll();
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('button[data-a]');
+  if(b){e.stopPropagation();selected=b.dataset.id;lastMediaKey='';if(b.dataset.a==='ack')act('ack',b.dataset.id);else{render();$('n').focus();document.getElementById('evTitle').scrollIntoView({behavior:'smooth',block:'center'})}return}
+  const tr=e.target.closest('tr[data-id]');if(tr){selected=tr.dataset.id;lastMediaKey='';render()}
+});
+$('evAck').onclick=()=>selected&&act('ack',selected);
+$('evRes').onclick=()=>{if(!selected)return;if(!$('n').value.trim()){$('evErr').textContent='Resolve note zaroori hai.';$('n').focus();return}act('resolve',selected)};
+$('pdfBtn').onclick=()=>{
+  const rows=S.incidents.map(i=>`<tr><td>#${i.no}</td><td>${esc(i.time_str)}</td><td>${esc(i.pole)} ${esc(i.sector)}</td><td>${esc(i.type)}</td><td>${esc(i.status)}</td><td>${esc(i.resolved_by||'-')}</td><td>${esc(i.note)}</td></tr>`).join('');
+  const w=window.open('','_blank');
+  w.document.write(`<html><head><title>Suraksha incident report</title><style>body{font:13px sans-serif;padding:24px}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccc;padding:6px;text-align:left}th{background:#eee}</style></head><body><h2>Suraksha Control Room - Incident Report</h2><p>Generated ${new Date().toLocaleString()} | Choose "Save as PDF" in the print dialog.</p><table><tr><th>ID</th><th>Time</th><th>Pole</th><th>Type</th><th>Status</th><th>Resolved by</th><th>Note</th></tr>${rows}</table></body></html>`);
+  w.document.close();w.focus();setTimeout(()=>w.print(),400);
+};
+
+async function poll(){try{S=await (await fetch('/api/state')).json();render()}catch(e){$('sys').textContent='Server unreachable';$('sys').style.background='#FFE2E8';$('sys').style.color='#A31D3F'}}
+function tick(){const d=new Date();$('clock').textContent=d.toLocaleTimeString();const h=d.getHours();$('shift').textContent=(h>=20||h<6)?'Night':(h<14?'Morning':'Evening')}
+setInterval(tick,1000);tick();poll();setInterval(poll,2000);
+</script>
+</body></html>
